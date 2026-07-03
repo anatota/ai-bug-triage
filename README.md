@@ -19,6 +19,32 @@ The output includes:
 - suspected area
 - missing information
 
+## Engineering Decisions
+
+### CLI-first design
+
+I built this as a command-line tool instead of a web app to keep the first version simple, scriptable, and easy to test. A CLI is enough for the core workflow: pass in a bug report, get structured triage output back. It can also be extended later into batch processing, GitHub issue creation, or CI/CD automation without needing to rewrite the core logic.
+
+### Environment-based configuration
+
+The OpenAI API key is loaded from a local `.env` file instead of being hardcoded. This keeps secrets out of the repository and allows each user to configure the app locally. The repo includes `.env.example` to show the required variables without exposing real credentials.
+
+### Structured JSON output
+
+The app asks the model to return structured JSON instead of free-form text. This makes the output easier to validate, save, compare, or pass into other tools such as GitHub Issues, Jira, dashboards, or reports.
+
+### JSON schema validation
+
+The app does not blindly trust the AI response. The model output is validated against a strict JSON schema before it is accepted. This helps catch missing fields, invalid severity/category values, malformed JSON, or unexpected extra properties.
+
+### Tests avoid real API calls
+
+The tests focus on deterministic local behavior, such as CLI input handling and schema validation. They do not call the OpenAI API because model output can vary, and real API calls would make tests slower, more expensive, and less reliable.
+
+### Separation of concerns
+
+The project separates CLI handling, AI triage logic, and schema validation into different files. This keeps the code easier to understand, test, and extend.
+
 ## Project Files
 
 ```text
