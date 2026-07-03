@@ -29,6 +29,7 @@ The output includes:
 |   |-- cli.py
 |   |-- schema.py
 |   `-- triage.py
+|-- main.py
 |-- samples/
 |   |-- login_bug.txt
 |   `-- mobile_checkout_bug.txt
@@ -85,21 +86,27 @@ Do not commit `.env` or any real API keys to Git.
 Run the app with a sample bug report:
 
 ```powershell
-python -m bug_triage_assistant --file samples\login_bug.txt
+python main.py --file samples\login_bug.txt
 ```
 
 You should see structured JSON printed in the terminal.
 
+Run the app with a short bug report typed directly into the command:
+
+```powershell
+python main.py "App crashes when I click login after typing wrong password"
+```
+
 Save JSON to a file:
 
 ```powershell
-python -m bug_triage_assistant --file samples\mobile_checkout_bug.txt --output triage-output.json
+python main.py --file samples\mobile_checkout_bug.txt --output triage-output.json
 ```
 
 Or pass a short report directly:
 
 ```powershell
-python -m bug_triage_assistant --text "The dashboard is blank after login on Chrome. Expected charts to load."
+python main.py "The dashboard is blank after login on Chrome. Expected charts to load."
 ```
 
 ## Example Output

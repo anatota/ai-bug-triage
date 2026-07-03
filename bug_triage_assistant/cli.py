@@ -1,5 +1,6 @@
 import argparse
 import json
+import sys
 from pathlib import Path
 
 
@@ -7,7 +8,12 @@ def main():
     parser = argparse.ArgumentParser(
         description="Convert a messy bug report into structured triage JSON."
     )
-    input_group = parser.add_mutually_exclusive_group(required=True)
+    parser.add_argument(
+        "report",
+        nargs="?",
+        help="Bug report text written directly in the command.",
+    )
+    input_group = parser.add_mutually_exclusive_group()
     input_group.add_argument("--file", help="Path to a text file containing a bug report.")
     input_group.add_argument("--text", help="Bug report text written directly in the command.")
     parser.add_argument(
@@ -16,11 +22,29 @@ def main():
     )
 
     args = parser.parse_args()
+    if args.report and (args.file or args.text):
+        parser.error("Use either quoted bug report text or --file/--text, not both.")
 
     from bug_triage_assistant.triage import triage_bug_report
 
-    report_text = read_report_text(args)
-    result = triage_bug_report(report_text)
+    try:
+        report_text = read_report_text(args)
+        if not report_text or not report_text.strip():
+            parser.error(
+                'No bug report provided. Try: python main.py "App crashes when I click login"'
+            )
+
+        result = triage_bug_report(report_text)
+    except FileNotFoundError:
+        print(f"Error: Could not find the file: {args.file}", file=sys.stderr)
+        return 1
+    except RuntimeError as error:
+        print(f"Error: {error}", file=sys.stderr)
+        return 1
+    except ValueError as error:
+        print(f"Error: {error}", file=sys.stderr)
+        return 1
+
     formatted_json = json.dumps(result, indent=2)
 
     if args.output:
@@ -34,8 +58,10 @@ def main():
 def read_report_text(args):
     if args.file:
         return Path(args.file).read_text(encoding="utf-8")
-    return args.text
+    if args.text:
+        return args.text
+    return args.report
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
