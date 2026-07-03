@@ -33,9 +33,13 @@ The output includes:
 |-- samples/
 |   |-- login_bug.txt
 |   `-- mobile_checkout_bug.txt
+|-- tests/
+|   |-- test_cli.py
+|   `-- test_schema.py
 |-- .env.example
 |-- .gitignore
 |-- README.md
+|-- requirements-dev.txt
 `-- requirements.txt
 ```
 
@@ -79,7 +83,7 @@ Copy-Item .env.example .env
 
 Open `.env` in VS Code and replace `your_openai_api_key_here` with your real OpenAI API key.
 
-Do not commit `.env` or any real API keys to Git.
+Do not commit `.env` or any real API keys to Git. The `.env` file is only for your local machine and is ignored by `.gitignore`.
 
 ## Run The Tool
 
@@ -107,6 +111,29 @@ Or pass a short report directly:
 
 ```powershell
 python main.py "The dashboard is blank after login on Chrome. Expected charts to load."
+```
+
+## Running Tests On Windows
+
+The tests only check local Python logic. They do not call the OpenAI API.
+
+In the VS Code PowerShell terminal, activate your virtual environment:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Install the normal app dependencies and the test dependency:
+
+```powershell
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+```
+
+Run the tests:
+
+```powershell
+pytest
 ```
 
 ## Example Output

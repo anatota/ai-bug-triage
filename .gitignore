@@ -24,3 +24,6 @@ build/
 
 # Local generated output
 triage-output.json
+pytest-output.txt
+*.log
+*.tmp
