@@ -1,0 +1,3 @@
+Checkout broke on my phone. I add two items, go to cart, tap Pay Now, and the app crashes.
+This started today after the latest release. I'm on iPhone 15, iOS 18, app v5.4.
+It charged my card once but the order page never appeared. Very bad.

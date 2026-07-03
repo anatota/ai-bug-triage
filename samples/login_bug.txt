@@ -1,0 +1,4 @@
+Login is weird after the update. I click Sign In and it just spins forever.
+Happens on my Windows 11 laptop in Chrome. I think we are on version 2.8.1.
+Refreshing sometimes works but usually not. No error message, just the spinner.
+Expected: I should get into my account dashboard after entering my password.
