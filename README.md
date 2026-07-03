@@ -23,27 +23,46 @@ The output includes:
 
 ```text
 .
-├── bug_triage_assistant/
-│   ├── __init__.py
-│   ├── cli.py
-│   ├── schema.py
-│   └── triage.py
-├── samples/
-│   ├── login_bug.txt
-│   └── mobile_checkout_bug.txt
-├── .env.example
-├── README.md
-└── requirements.txt
+|-- bug_triage_assistant/
+|   |-- __init__.py
+|   |-- __main__.py
+|   |-- cli.py
+|   |-- schema.py
+|   `-- triage.py
+|-- samples/
+|   |-- login_bug.txt
+|   `-- mobile_checkout_bug.txt
+|-- .env.example
+|-- .gitignore
+|-- README.md
+`-- requirements.txt
 ```
 
-## Setup On Windows PowerShell
+## Setup On Windows 10 In VS Code PowerShell
 
-Create and activate a virtual environment:
+These steps assume you opened this project folder in VS Code and are using the built-in PowerShell terminal.
+
+In VS Code, open the terminal:
+
+```text
+Terminal > New Terminal
+```
+
+Make sure the terminal is in the project folder. You should see a path ending in `ai-bug-triage`.
+
+Create a virtual environment:
 
 ```powershell
 python -m venv .venv
+```
+
+Activate the virtual environment:
+
+```powershell
 .\.venv\Scripts\Activate.ps1
 ```
+
+After activation, your prompt should start with `(.venv)`.
 
 Install dependencies:
 
@@ -57,17 +76,19 @@ Create your local environment file:
 Copy-Item .env.example .env
 ```
 
-Open `.env` and replace `your_openai_api_key_here` with your real OpenAI API key.
+Open `.env` in VS Code and replace `your_openai_api_key_here` with your real OpenAI API key.
 
 Do not commit `.env` or any real API keys to Git.
 
 ## Run The Tool
 
-Run it with a sample report:
+Run the app with a sample bug report:
 
 ```powershell
 python -m bug_triage_assistant --file samples\login_bug.txt
 ```
+
+You should see structured JSON printed in the terminal.
 
 Save JSON to a file:
 
