@@ -98,7 +98,7 @@ After activation, your prompt should start with `(.venv)`.
 Install dependencies:
 
 ```powershell
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
 Create your local environment file:
@@ -111,54 +111,118 @@ Open `.env` in VS Code and replace `your_openai_api_key_here` with your real Ope
 
 Do not commit `.env` or any real API keys to Git. The `.env` file is only for your local machine and is ignored by `.gitignore`.
 
+## Setup On Linux / Ubuntu
+
+These steps assume the repository has already been cloned and you are inside the project folder.
+
+```bash
+cd ai-bug-triage
+```
+
+Create a virtual environment:
+
+```bash
+python3 -m venv .venv
+```
+
+Activate the virtual environment:
+
+```bash
+source .venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+Create your local environment file:
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and replace `your_openai_api_key_here` with your real OpenAI API key:
+
+```bash
+nano .env
+```
+
+Use `python -m pip` instead of plain `pip` so packages are installed into the same Python environment that runs the app.
+
 ## Run The Tool
 
 Run the app with a sample bug report:
 
+Windows PowerShell:
+
 ```powershell
 python main.py --file samples\login_bug.txt
+```
+
+Linux / Ubuntu:
+
+```bash
+python main.py --file samples/login_bug.txt
 ```
 
 You should see structured JSON printed in the terminal.
 
 Run the app with a short bug report typed directly into the command:
 
-```powershell
+```bash
 python main.py "App crashes when I click login after typing wrong password"
 ```
 
 Save JSON to a file:
 
+Windows PowerShell:
+
 ```powershell
 python main.py --file samples\mobile_checkout_bug.txt --output triage-output.json
 ```
 
+Linux / Ubuntu:
+
+```bash
+python main.py --file samples/mobile_checkout_bug.txt --output triage-output.json
+```
+
 Or pass a short report directly:
 
-```powershell
+```bash
 python main.py "The dashboard is blank after login on Chrome. Expected charts to load."
 ```
 
-## Running Tests On Windows
+## Running Tests
 
 The tests only check local Python logic. They do not call the OpenAI API.
 
-In the VS Code PowerShell terminal, activate your virtual environment:
+Activate your virtual environment first.
+
+Windows PowerShell:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
+Linux / Ubuntu:
+
+```bash
+source .venv/bin/activate
+```
+
 Install the normal app dependencies and the test dependency:
 
-```powershell
-pip install -r requirements.txt
-pip install -r requirements-dev.txt
+```bash
+python -m pip install -r requirements.txt
+python -m pip install -r requirements-dev.txt
 ```
 
 Run the tests:
 
-```powershell
+```bash
 pytest
 ```
 
@@ -196,4 +260,3 @@ pytest
 - The default model is set in `.env.example` as `OPENAI_MODEL=gpt-4.1-mini`.
 - You can change the model in your `.env` file without changing the code.
 - If the model returns malformed or incomplete JSON, the app raises a validation error instead of silently accepting bad output.
-
