@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-bug-triage"
+version = "0.1.0"
+description = "A command-line tool that turns messy bug reports into structured JSON using the OpenAI API."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "openai>=1.40.0",
+    "python-dotenv>=1.0.1",
+    "jsonschema>=4.22.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["bug_triage_assistant*"]
