@@ -226,6 +226,18 @@ Run the tests:
 pytest
 ```
 
+## Development Setup
+
+For development, install the project in editable mode after activating your virtual environment:
+
+```bash
+source .venv/bin/activate
+python -m pip install -e ".[dev]"
+pytest
+```
+
+Editable install lets Python use the local source package while you work, so code changes in this folder are used without reinstalling the project.
+
 ## Example Output
 
 ```json
