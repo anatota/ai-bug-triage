@@ -238,6 +238,40 @@ pytest
 
 Editable install lets Python use the local source package while you work, so code changes in this folder are used without reinstalling the project.
 
+## Common Commands
+
+Use these commands from the project root after activating your virtual environment:
+
+```bash
+make install
+```
+
+Install the project in editable mode.
+
+```bash
+make install-dev
+```
+
+Install the project in editable mode with development dependencies.
+
+```bash
+make test
+```
+
+Run the test suite with pytest.
+
+```bash
+make run-example
+```
+
+Run the CLI with a short example bug report.
+
+```bash
+make clean
+```
+
+Remove common Python cache, test, and build artifacts.
+
 ## Example Output
 
 ```json
