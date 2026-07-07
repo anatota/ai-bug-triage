@@ -1,276 +1,104 @@
-# AI Bug Report Triage Assistant
+# AI Bug Triage Assistant
 
-A beginner-friendly command-line tool that turns messy bug reports into structured JSON using the OpenAI API.
+[![Tests](https://github.com/anatota/ai-bug-triage/actions/workflows/tests.yml/badge.svg)](https://github.com/anatota/ai-bug-triage/actions/workflows/tests.yml)
 
-## What It Does
+AI Bug Triage Assistant is a Python CLI tool that turns messy bug reports into structured triage JSON using the OpenAI API. It is designed for QA and bug triage workflows where inconsistent reports need to be organized into clear fields such as severity, category, reproduction steps, expected behavior, actual behavior, and missing information.
 
-You give the tool a plain-text bug report. It asks an OpenAI model to extract the important triage details, then validates the result against a JSON schema before showing or saving it.
+This is a focused v1 project: a practical command-line workflow with schema validation, automated tests, packaging metadata, Makefile commands, and GitHub Actions CI.
 
-The output includes:
+## Features
 
-- title
-- summary
-- severity
-- category
-- environment
-- steps to reproduce
-- expected behavior
-- actual behavior
-- suspected area
-- missing information
+- CLI input from quoted text, `--text`, or a bug report file
+- Structured JSON output for bug triage fields
+- JSON schema validation before accepting AI output
+- Missing information detection for incomplete reports
+- Severity and category suggestions
+- Optional output file support
+- Automated tests with pytest
+- GitHub Actions CI for test runs
+- Makefile commands for common local workflows
 
-## Engineering Decisions
+## Tech Stack
 
-### CLI-first design
+- Python 3.12+
+- OpenAI API
+- jsonschema
+- pytest
+- pyproject.toml packaging
+- Makefile
+- GitHub Actions
 
-I built this as a command-line tool instead of a web app to keep the first version simple, scriptable, and easy to test. A CLI is enough for the core workflow: pass in a bug report, get structured triage output back. It can also be extended later into batch processing, GitHub issue creation, or CI/CD automation without needing to rewrite the core logic.
+## Installation
 
-### Environment-based configuration
-
-The OpenAI API key is loaded from a local `.env` file instead of being hardcoded. This keeps secrets out of the repository and allows each user to configure the app locally. The repo includes `.env.example` to show the required variables without exposing real credentials.
-
-### Structured JSON output
-
-The app asks the model to return structured JSON instead of free-form text. This makes the output easier to validate, save, compare, or pass into other tools such as GitHub Issues, Jira, dashboards, or reports.
-
-### JSON schema validation
-
-The app does not blindly trust the AI response. The model output is validated against a strict JSON schema before it is accepted. This helps catch missing fields, invalid severity/category values, malformed JSON, or unexpected extra properties.
-
-### Tests avoid real API calls
-
-The tests focus on deterministic local behavior, such as CLI input handling and schema validation. They do not call the OpenAI API because model output can vary, and real API calls would make tests slower, more expensive, and less reliable.
-
-### Separation of concerns
-
-The project separates CLI handling, AI triage logic, and schema validation into different files. This keeps the code easier to understand, test, and extend.
-
-## Project Files
-
-```text
-.
-|-- bug_triage_assistant/
-|   |-- __init__.py
-|   |-- __main__.py
-|   |-- cli.py
-|   |-- schema.py
-|   `-- triage.py
-|-- main.py
-|-- samples/
-|   |-- login_bug.txt
-|   `-- mobile_checkout_bug.txt
-|-- tests/
-|   |-- test_cli.py
-|   `-- test_schema.py
-|-- .env.example
-|-- .gitignore
-|-- README.md
-|-- requirements-dev.txt
-`-- requirements.txt
-```
-
-## Setup On Windows 10 In VS Code PowerShell
-
-These steps assume you opened this project folder in VS Code and are using the built-in PowerShell terminal.
-
-In VS Code, open the terminal:
-
-```text
-Terminal > New Terminal
-```
-
-Make sure the terminal is in the project folder. You should see a path ending in `ai-bug-triage`.
-
-Create a virtual environment:
-
-```powershell
-python -m venv .venv
-```
-
-Activate the virtual environment:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-After activation, your prompt should start with `(.venv)`.
-
-Install dependencies:
-
-```powershell
-python -m pip install -r requirements.txt
-```
-
-Create your local environment file:
-
-```powershell
-Copy-Item .env.example .env
-```
-
-Open `.env` in VS Code and replace `your_openai_api_key_here` with your real OpenAI API key.
-
-Do not commit `.env` or any real API keys to Git. The `.env` file is only for your local machine and is ignored by `.gitignore`.
-
-## Setup On Linux / Ubuntu
-
-These steps assume the repository has already been cloned and you are inside the project folder.
+Clone the repository and move into the project folder:
 
 ```bash
+git clone git@github.com:anatota/ai-bug-triage.git
 cd ai-bug-triage
 ```
 
-Create a virtual environment:
+Create and activate a virtual environment.
+
+On Linux/macOS:
 
 ```bash
-python3 -m venv .venv
-```
-
-Activate the virtual environment:
-
-```bash
+python -m venv .venv
 source .venv/bin/activate
 ```
 
-Install dependencies:
-
-```bash
-python -m pip install -r requirements.txt
-```
-
-Create your local environment file:
-
-```bash
-cp .env.example .env
-```
-
-Open `.env` and replace `your_openai_api_key_here` with your real OpenAI API key:
-
-```bash
-nano .env
-```
-
-Use `python -m pip` instead of plain `pip` so packages are installed into the same Python environment that runs the app.
-
-## Run The Tool
-
-Run the app with a sample bug report:
-
-Windows PowerShell:
+On Windows PowerShell:
 
 ```powershell
-python main.py --file samples\login_bug.txt
-```
-
-Linux / Ubuntu:
-
-```bash
-python main.py --file samples/login_bug.txt
-```
-
-You should see structured JSON printed in the terminal.
-
-Run the app with a short bug report typed directly into the command:
-
-```bash
-python main.py "App crashes when I click login after typing wrong password"
-```
-
-Save JSON to a file:
-
-Windows PowerShell:
-
-```powershell
-python main.py --file samples\mobile_checkout_bug.txt --output triage-output.json
-```
-
-Linux / Ubuntu:
-
-```bash
-python main.py --file samples/mobile_checkout_bug.txt --output triage-output.json
-```
-
-Or pass a short report directly:
-
-```bash
-python main.py "The dashboard is blank after login on Chrome. Expected charts to load."
-```
-
-## Running Tests
-
-The tests only check local Python logic. They do not call the OpenAI API.
-
-Activate your virtual environment first.
-
-Windows PowerShell:
-
-```powershell
+python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-Linux / Ubuntu:
-
-```bash
-source .venv/bin/activate
-```
-
-Install the normal app dependencies and the test dependency:
-
-```bash
-python -m pip install -r requirements.txt
-python -m pip install -r requirements-dev.txt
-```
-
-Run the tests:
-
-```bash
-pytest
-```
-
-## Development Setup
-
-For development, install the project in editable mode after activating your virtual environment:
-
-```bash
-source .venv/bin/activate
-python -m pip install -e ".[dev]"
-pytest
-```
-
-Editable install lets Python use the local source package while you work, so code changes in this folder are used without reinstalling the project.
-
-## Common Commands
-
-Use these commands from the project root after activating your virtual environment:
-
-```bash
-make install
-```
-
-Install the project in editable mode.
+Install the project with development dependencies:
 
 ```bash
 make install-dev
 ```
 
-Install the project in editable mode with development dependencies.
+Create a local environment file:
 
 ```bash
-make test
+cp .env.example .env
 ```
 
-Run the test suite with pytest.
+Then edit `.env` and set your OpenAI API key:
+
+```text
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4.1-mini
+```
+
+Do not commit `.env` or real API keys.
+
+## Usage
+
+Run the CLI with a short bug report:
+
+```bash
+python main.py "App crashes when I click the login button after entering a valid email."
+```
+
+Run the included example command:
 
 ```bash
 make run-example
 ```
 
-Run the CLI with a short example bug report.
+Run the CLI with a sample file:
 
 ```bash
-make clean
+python main.py --file samples/login_bug.txt
 ```
 
-Remove common Python cache, test, and build artifacts.
+Save the structured JSON to a file:
+
+```bash
+python main.py --file samples/mobile_checkout_bug.txt --output triage-output.json
+```
 
 ## Example Output
 
@@ -301,8 +129,78 @@ Remove common Python cache, test, and build artifacts.
 }
 ```
 
+## Common Commands
+
+Use these commands from the project root after activating your virtual environment:
+
+```bash
+make install
+```
+
+Install the project in editable mode.
+
+```bash
+make install-dev
+```
+
+Install the project in editable mode with development dependencies.
+
+```bash
+make test
+```
+
+Run the test suite with pytest.
+
+```bash
+make run-example
+```
+
+Run the CLI with an example bug report.
+
+```bash
+make clean
+```
+
+Remove common Python cache, test, and build artifacts.
+
+## Testing
+
+Tests are run with pytest:
+
+```bash
+make test
+```
+
+The test suite focuses on deterministic local behavior, including CLI input handling and schema validation. Tests do not rely on live OpenAI API calls where local validation is enough. GitHub Actions also runs the test suite automatically on pushes and pull requests.
+
+## CI
+
+This repository uses GitHub Actions for continuous integration. The workflow is defined in `.github/workflows/tests.yml` and runs:
+
+- dependency installation with `make install-dev`
+- the test suite with `make test`
+
+## What This Project Demonstrates
+
+This project demonstrates practical skills relevant to junior QA automation, technical QA, and junior Python roles:
+
+- writing a usable Python CLI tool
+- validating structured AI output instead of blindly trusting model responses
+- testing core behavior without relying on live API calls where applicable
+- packaging a Python project with `pyproject.toml`
+- using Makefile commands for a reproducible local workflow
+- running automated tests in GitHub Actions CI
+
+## Future Improvements
+
+- Dockerfile and docker-compose for easier local setup
+- Optional FastAPI endpoint for HTTP-based triage
+- GitHub or Jira issue integration
+- Batch processing for multiple bug reports
+- Richer test fixtures for more report formats
+
 ## Notes
 
 - The default model is set in `.env.example` as `OPENAI_MODEL=gpt-4.1-mini`.
-- You can change the model in your `.env` file without changing the code.
+- You can change the model in `.env` without changing the code.
 - If the model returns malformed or incomplete JSON, the app raises a validation error instead of silently accepting bad output.
