@@ -6,6 +6,10 @@ AI Bug Triage Assistant is a Python CLI tool that turns messy bug reports into s
 
 This is a focused v1 project: a practical command-line workflow with schema validation, automated tests, packaging metadata, Makefile commands, and GitHub Actions CI.
 
+## Demo
+
+![AI Bug Triage CLI demo](assets/ai-bug-triage-demo.gif)
+
 ## Features
 
 - CLI input from quoted text, `--text`, or a bug report file
