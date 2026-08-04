@@ -50,6 +50,11 @@ def triage_bug_report(report_text):
     )
 
     content = response.choices[0].message.content
+    if not isinstance(content, str):
+        raise ValueError(
+            "The model returned invalid JSON. Please try again or simplify the bug report."
+        )
+
     try:
         data = json.loads(content)
     except json.JSONDecodeError as error:
